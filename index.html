@@ -204,7 +204,7 @@ grid-template-columns:1fr;
 
 <!-- POSITION SETUP -->
 <div class="card">
-<h2>1. Position Setup Engine</h2>
+<h2>Position Setup Engine</h2>
 
 <div class="form-grid">
 
@@ -271,7 +271,7 @@ grid-template-columns:1fr;
 
 <!-- RUNNING PNL -->
 <div class="card">
-<h2>2. Running P&L Tracker</h2>
+<h2>Running P&L Tracker</h2>
 
 <div class="form-grid">
 
@@ -374,7 +374,7 @@ grid-template-columns:1fr;
 <!-- EXPIRY ENGINE -->
 
 <div class="card">
-<h2>3. Futuristic P&L Engine (At Expiration)</h2>
+<h2>Futuristic P&L Engine (At Expiration)</h2>
 
 <div class="field">
 <label>Target Expiry Underlying Price</label>
@@ -429,7 +429,7 @@ border-collapse:collapse;
 
 <!-- SINGLE LEG EXIT -->
 <div class="card">
-<h2>4. Single Leg Exit Calculator</h2>
+<h2>Single Leg Exit Calculator</h2>
 
 <div class="form-grid">
 
@@ -493,6 +493,38 @@ instrument;
 }
 
 calculate();
+
+}
+
+function getStrikeInterval(){
+
+const instrument =
+document.getElementById('instrument').value;
+
+switch(instrument){
+
+case "75":
+return 50;      // NIFTY
+
+case "35":
+return 100;     // BANKNIFTY
+
+case "65":
+return 50;      // FINNIFTY
+
+case "120":
+return 25;      // MIDCPNIFTY
+
+case "20":
+return 100;     // SENSEX
+
+case "30":
+return 100;     // BANKEX
+
+default:
+return 100;
+
+}
 
 }
 
@@ -681,23 +713,24 @@ Math.abs(spotPrice - lowerBE).toFixed(2);
 document.getElementById('distUpper').innerText =
 Math.abs(upperBE - spotPrice).toFixed(2);
 
-const scenarios = [
-spotPrice - 1000,
-spotPrice - 500,
-spotPrice,
-spotPrice + 500,
-spotPrice + 1000
-];
+const interval =
+getStrikeInterval();
+
+const atmStrike =
+Math.round(spotPrice / interval) * interval;
 
 let rows = "";
 
-scenarios.forEach(price => {
+for(let i = 5; i >= -5; i--){
+
+const strike =
+atmStrike + (i * interval);
 
 const c =
-Math.max(0, price - callStrike);
+Math.max(0, strike - callStrike);
 
 const p =
-Math.max(0, putStrike - price);
+Math.max(0, putStrike - strike);
 
 let pnl = 0;
 
@@ -716,15 +749,43 @@ pnl =
 
 }
 
+let label = "";
+
+if(i > 0){
+
+label = "+" + i;
+
+}
+else if(i < 0){
+
+label = i;
+
+}
+else{
+
+label = "ATM";
+
+}
+
+let rowStyle = "";
+
+if(i === 0){
+
+rowStyle =
+'style="background:#e8f0ff;font-weight:bold;"';
+
+}
+
 rows += `
-<tr>
-<td>${price.toFixed(0)}</td>
+<tr ${rowStyle}>
+<td>${label}</td>
+<td>${strike.toFixed(0)}</td>
 <td>${formatMoney(pnl)}</td>
 </tr>
 `;
 
-});
-    
+}
+
 document.querySelector(
 "#scenarioTable tbody"
 ).innerHTML = rows;
