@@ -1,23 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Straddle & Strangle P&L Calculator</title>
+
+<title>STWP Spread Lab v2.0</title>
 
 <style>
+
 :root{
+
 --bg:#f5f7fa;
 --card:#ffffff;
 --border:#dfe5ec;
 --text:#1f2937;
 --muted:#6b7280;
+
 --profit:#16a34a;
 --profit-bg:#ecfdf3;
+
 --loss:#dc2626;
 --loss-bg:#fef2f2;
+
 --accent:#2563eb;
---shadow:0 8px 24px rgba(0,0,0,.06);
+--warning:#f59e0b;
+
+--shadow:0 10px 30px rgba(0,0,0,.08);
+
 }
 
 *{
@@ -28,182 +39,513 @@ font-family:Inter,Segoe UI,Arial,sans-serif;
 }
 
 body{
+
 background:var(--bg);
-padding:24px;
 color:var(--text);
+padding:10px;
+
 }
 
 .container{
-max-width:1800px;
+
+max-width:1900px;
 margin:auto;
+
 }
 
 .header{
-margin-bottom:8px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+margin-bottom:20px;
+
+padding-bottom:14px;
+
+border-bottom:2px solid #e8edf3;
+
 }
 
-.header h1{
-font-size:20px;
-margin-bottom:2px;
+.title h1{
+
+font-size:14px;
+font-weight:700;
+
 }
 
-.header p{
+.title p{
+
+margin-top:4px;
+font-size:13px;
 color:var(--muted);
-font-size:11px;
+
 }
 
-.grid{
+.version{
+
+padding:8px 16px;
+
+border-radius:25px;
+
+background:#edf4ff;
+
+color:#2563eb;
+
+font-weight:600;
+
+font-size:13px;
+
+}
+
+.dashboard{
+
 display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:10px;
+
+grid-template-columns:
+
+1fr
+1fr
+1fr;
+
+gap:18px;
+
 align-items:start;
+
+}
+
+.column{
+
+display:flex;
+
+flex-direction:column;
+
+gap:12px;
+
 }
 
 .card{
+
 background:var(--card);
+
 border:1px solid var(--border);
+
 border-radius:10px;
-padding:12px;
+
+padding:10px;
+
 box-shadow:var(--shadow);
+
 }
 
 .card h2{
-font-size:17px;
-margin-bottom:10px;
+
+font-size:14px;
+
+margin-bottom:8px;
+
 color:var(--accent);
+
 }
 
 .form-grid{
+
 display:grid;
+
 grid-template-columns:1fr 1fr;
+
 gap:6px;
+
 }
 
 .field{
+
 display:flex;
+
 flex-direction:column;
+
 }
 
 .field label{
-font-size:14px;
-color:var(--muted);
+
+font-size:12px;
+
 margin-bottom:2px;
+
+color:var(--muted);
+
 }
 
 input,
 select{
+
 padding:6px 8px;
-border:1px solid var(--border);
+
+height:30px;
+
 border-radius:6px;
-font-size:14px;
-outline:none;
+
+border:1px solid var(--border);
+
+font-size:13px;
+
 }
 
 input:focus,
 select:focus{
+
 border-color:var(--accent);
+
 }
 
 .full{
+
 grid-column:1/-1;
-}
 
-.result-box{
-margin-top:15px;
-border-radius:14px;
-padding:18px;
-text-align:center;
-transition:.25s ease;
-border:2px solid transparent;
-}
-
-.result-label{
-font-size:14px;
-opacity:.8;
-margin-bottom:6px;
-}
-
-.result-value{
-font-size:20px;
-font-weight:700;
-}
-
-.profit{
-background:var(--profit-bg);
-color:var(--profit);
-border-color:var(--profit);
-}
-
-.loss{
-background:var(--loss-bg);
-color:var(--loss);
-border-color:var(--loss);
 }
 
 .metric{
+
 display:flex;
+
 justify-content:space-between;
-padding:3px 0;
-border-bottom:1px solid #eef2f7;
-font-size:14px;
+
+padding:5px 0;
+
+border-bottom:1px solid #edf1f6;
+
+font-size:13px;
+
 }
 
 .metric:last-child{
+
 border-bottom:none;
+
 }
 
 .metric span:first-child{
+
 color:var(--muted);
+
+}
+
+.result-box{
+
+margin-top:6px;
+
+padding:6px;
+
+border-radius:8px;
+
+text-align:center;
+
+font-weight:600;
+
+border:1px solid transparent;
+
+min-height:10px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+}
+
+.result-label{
+
+font-size:13px;
+
+margin-bottom:6px;
+
+}
+
+.result-value{
+
+font-size:14px;
+
+}
+
+.profit{
+
+background:var(--profit-bg);
+
+color:var(--profit);
+
+border-color:var(--profit);
+
+}
+
+.loss{
+
+background:var(--loss-bg);
+
+color:var(--loss);
+
+border-color:var(--loss);
+
 }
 
 .output-premium{
-margin-top:8px;
-font-size:18px;
+
+margin-top:12px;
+
+font-size:14px;
+
 font-weight:700;
-color:var(--accent);
+
 text-align:center;
+
+color:var(--accent);
+
 }
 
 .footer-note{
+
 margin-top:12px;
-color:var(--muted);
-font-size:14px;
+
 text-align:center;
+
+font-size:13px;
+
+color:var(--muted);
+
 }
 
-#scenarioTable th{
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+margin-top:10px;
+
+}
+
+th{
+
+background:#f3f7fc;
+
+padding:5px;
+
+font-size:12px;
+
+border-bottom:1px solid var(--border);
+
+}
+
+td{
+
 padding:4px;
-border-bottom:1px solid #dfe5ec;
+
+font-size:12px;
+
+text-align:center;
+
+border-bottom:1px solid #eef2f7;
+
+font-size:13px;
+
 }
 
-#scenarioTable td{
-padding:3px;
+tr:hover{
+
+background:#fafcff;
+
 }
 
-@media(max-width:900px){
-.grid{
+.atm{
+
+background:#e7f1ff;
+
+font-weight:700;
+
+}
+
+.atm{
+
+background:#e8f1ff;
+
+font-weight:600;
+
+}
+
+.target{
+
+background:#dcfce7;
+
+font-weight:700;
+
+color:#166534;
+
+}
+
+.bottom-panel{
+
+margin-top:18px;
+
+}
+
+@media(max-width:1200px){
+
+.dashboard{
+
 grid-template-columns:1fr;
+
 }
 
 .form-grid{
+
 grid-template-columns:1fr;
+
 }
+
 }
+
 </style>
+
 </head>
+
 <body>
 
 <div class="container">
 
 <div class="header">
-<h1>Straddle & Strangle P&L Calculator</h1>
-<p>Real-Time Running P&L, Expiry P&L Engine & Single Leg Exit Calculator</p>
+
+<div class="title">
+
+<h1>STWP Spread Lab</h1>
+
+<p>
+Professional Options Strategy Calculator
+</p>
+
 </div>
 
-<div class="grid">
+<div class="version">
+
+Version 2.0
+
+</div>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- LIVE DASHBOARD BAR -->
+<!-- ========================================================= -->
+
+<div class="card" style="margin-bottom:18px;">
+
+<div
+style="
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:15px;
+text-align:center;
+">
+
+<div>
+
+<div style="font-size:12px;color:#6b7280;">
+Current Strategy
+</div>
+
+<div
+id="dashStrategy"
+style="font-size:14px;font-weight:700;">
+-
+</div>
+
+</div>
+
+<div>
+
+<div style="font-size:12px;color:#6b7280;">
+Position
+</div>
+
+<div
+id="dashPosition"
+style="font-size:14px;font-weight:700;">
+-
+</div>
+
+</div>
+
+<div>
+
+<div style="font-size:12px;color:#6b7280;">
+Current P&L
+</div>
+
+<div
+id="dashPnL"
+style="font-size:14px;font-weight:700;color:#16a34a;">
+0.00
+</div>
+
+</div>
+
+<div>
+
+<div style="font-size:12px;color:#6b7280;">
+Break-Even Width
+</div>
+
+<div
+id="dashWidth"
+style="font-size:14px;font-weight:700;">
+0
+</div>
+
+</div>
+
+<div>
+
+<div style="font-size:12px;color:#6b7280;">
+Net Premium
+</div>
+
+<div
+id="dashPremium"
+style="font-size:14px;font-weight:700;">
+0
+</div>
+
+</div>
+
+<div>
+
+<div style="font-size:12px;color:#6b7280;">
+Risk
+</div>
+
+<div
+id="dashRisk"
+style="font-size:14px;font-weight:700;">
+0
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="dashboard">
+
+<!-- ========================================================= -->
+<!-- LEFT COLUMN -->
+<!-- ========================================================= -->
+
+<div class="column">
 
 <!-- POSITION SETUP -->
+
 <div class="card">
+
 <h2>Position Setup Engine</h2>
 
 <div class="form-grid">
@@ -221,121 +563,390 @@ grid-template-columns:1fr;
 <div class="field">
 <label>Instrument</label>
 <select id="instrument" onchange="setLotSize()">
+
 <option value="">Custom</option>
+
 <option value="75">NIFTY</option>
+
 <option value="35">BANKNIFTY</option>
+
 <option value="65">FINNIFTY</option>
+
 <option value="120">MIDCPNIFTY</option>
+
 <option value="20">SENSEX</option>
+
 <option value="30">BANKEX</option>
+
 </select>
 </div>
 
 <div class="field">
+<label>Lot Size</label>
+<input
+type="number"
+id="lotSize"
+value="100"
+oninput="calculate()">
+</div>
+
+<div class="field">
 <label>Number of Lots</label>
-<input type="number" id="lots" value="1" oninput="calculate()">
+<input
+type="number"
+id="lots"
+value="1"
+oninput="calculate()">
+</div>
+
+<div class="field">
+<label>Entry Spot Price</label>
+<input
+type="number"
+id="spotPrice"
+value="100"
+oninput="calculate()">
 </div>
 
 <div class="field">
 <label>Call Strike</label>
-<input type="number" id="callStrike" value="100" oninput="calculate()">
+<input
+type="number"
+id="callStrike"
+value="100"
+oninput="calculate()">
 </div>
 
 <div class="field">
 <label>Put Strike</label>
-<input type="number" id="putStrike" value="100" oninput="calculate()">
+<input
+type="number"
+id="putStrike"
+value="100"
+oninput="calculate()">
 </div>
 
 <div class="field">
 <label>Call Entry Premium</label>
-<input type="number" id="callEntry" value="5" oninput="calculate()">
+<input
+type="number"
+id="callEntry"
+value="5"
+oninput="calculate()">
 </div>
 
 <div class="field">
 <label>Put Entry Premium</label>
-<input type="number" id="putEntry" value="5" oninput="calculate()">
-</div>
-
-<div class="field">
-<label>Current Spot Price</label>
-<input type="number" id="spotPrice" value="100" oninput="calculate()">
-</div>
-
-<div class="field">
-<label>Lot Size</label>
-<input type="number" id="lotSize" value="100" oninput="calculate()">
+<input
+type="number"
+id="putEntry"
+value="5"
+oninput="calculate()">
 </div>
 
 </div>
+
 </div>
 
-<!-- RUNNING PNL -->
+<!-- FUTURISTIC P&L ENGINE -->
+
 <div class="card">
-<h2>Running P&L Tracker</h2>
+
+<h2>Futuristic P&L Engine</h2>
+
+<div class="field">
+
+<label>Target Expiry Underlying Price</label>
+
+<input
+type="number"
+id="expiryPrice"
+value="100"
+oninput="calculate()">
+
+</div>
+
+<div
+id="expiryBox"
+class="result-box profit">
+
+<div class="result-label">
+
+Expiration Cash P&amp;L
+
+</div>
+
+<div
+id="expiryPnl"
+class="result-value">
+
+0.00
+
+</div>
+
+</div>
+
+<div class="metric">
+
+<span>Call Intrinsic Value</span>
+
+<span id="callIntrinsic">0.00</span>
+
+</div>
+
+<div class="metric">
+
+<span>Put Intrinsic Value</span>
+
+<span id="putIntrinsic">0.00</span>
+
+</div>
+
+<div class="metric">
+
+<span>Total Intrinsic Value</span>
+
+<span id="totalIntrinsic">0.00</span>
+
+</div>
+
+</div>
+
+<!-- SINGLE LEG EXIT -->
+
+<div class="card">
+
+<h2>Single Leg Exit Calculator</h2>
 
 <div class="form-grid">
 
 <div class="field">
-<label>Live Call Market Price</label>
-<input type="number" id="callLive" value="5" oninput="calculate()">
+
+<label>Target Leg</label>
+
+<select
+id="legType"
+onchange="calculate()">
+
+<option>Call</option>
+
+<option>Put</option>
+
+</select>
+
 </div>
 
 <div class="field">
+
+<label>Target Profit</label>
+
+<input
+type="number"
+id="targetCash"
+value="1000"
+oninput="calculate()">
+
+</div>
+
+</div>
+
+<div
+id="requiredPremium"
+class="output-premium">
+
+0.00
+
+</div>
+
+<div class="footer-note">
+
+Required Exit Premium
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- CENTER COLUMN -->
+<!-- ========================================================= -->
+
+<div class="column">
+
+<!-- RUNNING P&L TRACKER -->
+
+<div class="card">
+
+<h2>Running P&amp;L Tracker</h2>
+
+<div class="form-grid">
+
+<div class="field">
+
+<label>Live Call Market Price</label>
+
+<input
+type="number"
+id="callLive"
+value="5"
+oninput="calculate()">
+
+</div>
+
+<div class="field">
+
 <label>Live Put Market Price</label>
-<input type="number" id="putLive" value="5" oninput="calculate()">
-</div>
+
+<input
+type="number"
+id="putLive"
+value="5"
+oninput="calculate()">
 
 </div>
 
-<div id="runningBox" class="result-box profit">
-<div class="result-label">Running Cash P&L</div>
-<div id="runningPnl" class="result-value">0.00</div>
+<div class="field">
+
+<label>Live Spot Price</label>
+
+<input
+type="number"
+id="liveSpotPrice"
+value="100"
+oninput="calculate()">
+
+</div>
+
+<div class="field">
+
+<label>Call Delta</label>
+
+<input
+type="number"
+step="0.01"
+id="callDelta"
+value="0.50"
+oninput="calculate()">
+
+</div>
+
+<div class="field">
+
+<label>Put Delta</label>
+
+<input
+type="number"
+step="0.01"
+id="putDelta"
+value="-0.50"
+oninput="calculate()">
+
+</div>
+
+<div class="field">
+
+<label>Desired Running P&amp;L</label>
+
+<input
+type="number"
+id="targetRunningPnl"
+value="10000"
+oninput="calculate()">
+
+</div>
+
+</div>
+
+<div
+id="runningBox"
+class="result-box profit">
+
+<div class="result-label">
+
+Running Cash P&amp;L
+
+</div>
+
+<div
+id="runningPnl"
+class="result-value">
+
+0.00
+
+</div>
+
+</div>
+
+<div class="metric">
+<span>Position Type</span>
+<span id="positionType">Long Premium</span>
 </div>
 
 <div class="metric">
 <span>Net Entry Premium</span>
-<span id="entryPremiumDisplay">0</span>
+<span id="entryPremiumDisplay">0.00</span>
 </div>
 
 <div class="metric">
 <span>Net Live Premium</span>
-<span id="livePremiumDisplay">0</span>
+<span id="livePremiumDisplay">0.00</span>
 </div>
 
 <div class="metric">
-    <span>Position Type</span>
-    <span id="positionType">Long Premium</span>
+<span>Total Premium Difference</span>
+<span id="netPremiumMetric">0.00</span>
 </div>
 
 <div class="metric">
-    <span>Net Premium</span>
-    <span id="netPremiumMetric">0.00</span>
+<span>Maximum Profit</span>
+<span id="maxProfitMetric">Unlimited</span>
 </div>
 
 <div class="metric">
-    <span>Max Profit</span>
-    <span id="maxProfitMetric">Unlimited</span>
+<span>Maximum Loss</span>
+<span id="maxLossMetric">0.00</span>
 </div>
 
 <div class="metric">
-    <span>Max Loss</span>
-    <span id="maxLossMetric">0.00</span>
-</div>
-
-<div class="metric">
-    <span>Risk Per Lot</span>
-    <span id="riskPerLotMetric">0.00</span>
+<span>Risk Per Lot</span>
+<span id="riskPerLotMetric">0.00</span>
 </div>
 
 </div>
+
+<!-- LIVE SCENARIO ANALYSIS -->
+
+<div class="card">
+
+<h2>Running Trade Planner</h2>
+
+<table id="liveScenarioTable">
+
+<tbody>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- RIGHT COLUMN -->
+<!-- ========================================================= -->
+
+<div class="column">
 
 <!-- BREAK-EVEN ANALYSIS -->
 
 <div class="card">
+
 <h2>Break-Even Analysis</h2>
 
 <div class="metric">
-<span>Total Premium</span>
+<span>Total Premium Paid / Received</span>
 <span id="totalPremium">0.00</span>
 </div>
 
@@ -371,124 +982,163 @@ grid-template-columns:1fr;
 
 </div>
 
-<!-- EXPIRY ENGINE -->
 
-<div class="card">
-<h2>Futuristic P&L Engine (At Expiration)</h2>
-
-<div class="field">
-<label>Target Expiry Underlying Price</label>
-<input type="number" id="expiryPrice" value="100" oninput="calculate()">
-</div>
-
-<div id="expiryBox" class="result-box profit">
-<div class="result-label">Expiration Cash P&L</div>
-<div id="expiryPnl" class="result-value">0.00</div>
-</div>
-
-<div class="metric">
-<span>Call Intrinsic Value</span>
-<span id="callIntrinsic">0</span>
-</div>
-
-<div class="metric">
-<span>Put Intrinsic Value</span>
-<span id="putIntrinsic">0</span>
-</div>
-
-</div>
-
-<!-- SCENARIO ANALYSIS -->
+<!-- EXPIRY SCENARIO ANALYSIS -->
 
 <div class="card">
 
-<h2>Scenario Analysis</h2>
+<h2>Expiry Scenario Analysis</h2>
 
-<table id="scenarioTable"
-style="
-width:100%;
-font-size:14px;
-text-align:center;
-border-collapse:collapse;
-">
+<table id="scenarioTable">
 
 <thead>
+
 <tr>
+
 <th>Move</th>
-<th>Strike</th>
-<th>P&L</th>
+
+<th>Expiry Spot</th>
+
+<th>Call IV</th>
+
+<th>Put IV</th>
+
+<th>Net IV</th>
+
+<th>Expiry P&amp;L</th>
+
 </tr>
+
 </thead>
 
 <tbody>
+
 </tbody>
 
 </table>
 
 </div>
 
-<!-- SINGLE LEG EXIT -->
+
+<!-- QUICK POSITION SUMMARY -->
+
 <div class="card">
-<h2>Single Leg Exit Calculator</h2>
 
-<div class="form-grid">
+<h2>Position Summary</h2>
 
-<div class="field">
-<label>Target Leg P&L ()</label>
-<input type="number" id="targetCash" value="1000" oninput="calculate()">
+<div class="metric">
+<span>Instrument</span>
+<span id="summaryInstrument">-</span>
 </div>
 
-<div class="field">
-<label>Target Leg Type</label>
-<select id="legType" onchange="calculate()">
-<option>Call</option>
-<option>Put</option>
-</select>
+<div class="metric">
+<span>Strategy</span>
+<span id="summaryStrategy">-</span>
 </div>
 
+<div class="metric">
+<span>Total Quantity</span>
+<span id="summaryQty">0</span>
 </div>
 
-<div class="output-premium" id="requiredPremium">
-0.00
+<div class="metric">
+<span>Current Bias</span>
+<span id="summaryBias">Neutral</span>
 </div>
 
-<div class="footer-note">
-Required Exit Premium for Selected Leg
-</div>
-
-</div>
-
+<div class="metric">
+<span>Current Status</span>
+<span id="summaryStatus">Waiting</span>
 </div>
 
 </div>
+
+</div>
+
+</div> <!-- END DASHBOARD -->
+
+<footer
+style="
+margin-top:20px;
+text-align:center;
+font-size:13px;
+color:#6b7280;
+padding:15px;
+border-top:1px solid #e5e7eb;
+">
+
+STWP Spread Lab v2.0 • Professional Options Strategy Calculator
+
+</footer>
 
 <script>
+
+/* ==========================================================
+STWP SPREAD LAB v2.0
+Core Utility Functions
+========================================================== */
 
 function num(id){
 return parseFloat(document.getElementById(id).value) || 0;
 }
 
-function formatMoney(v){
-return '' + v.toLocaleString(undefined,{
+function setText(id,value){
+const el=document.getElementById(id);
+if(el) el.innerText=value;
+}
+
+function money(value){
+return value.toLocaleString(undefined,{
 minimumFractionDigits:2,
 maximumFractionDigits:2
 });
 }
 
-function updateBox(box,value){
-box.classList.remove('profit','loss');
-box.classList.add(value >= 0 ? 'profit' : 'loss');
+function updateBox(id,value){
+
+const box=document.getElementById(id);
+
+if(!box) return;
+
+box.classList.remove("profit","loss");
+
+if(value>=0){
+box.classList.add("profit");
+}else{
+box.classList.add("loss");
+}
+
 }
 
 function setLotSize(){
 
-const instrument =
-document.getElementById('instrument').value;
+const instrument=document.getElementById("instrument").value;
 
-if(instrument){
+switch(instrument){
 
-document.getElementById('lotSize').value =
-instrument;
+case "75":
+document.getElementById("lotSize").value=75;
+break;
+
+case "35":
+document.getElementById("lotSize").value=35;
+break;
+
+case "65":
+document.getElementById("lotSize").value=65;
+break;
+
+case "120":
+document.getElementById("lotSize").value=120;
+break;
+
+case "20":
+document.getElementById("lotSize").value=20;
+break;
+
+case "30":
+document.getElementById("lotSize").value=30;
+break;
 
 }
 
@@ -496,29 +1146,338 @@ calculate();
 
 }
 
-function getStrikeInterval(){
+/* ==========================================================
+READ ALL INPUTS
+========================================================== */
 
-const instrument =
-document.getElementById('instrument').value;
+function getInputs(){
 
-switch(instrument){
+return{
 
-case "75":
+strategy:document.getElementById("strategy").value,
+
+lotSize:num("lotSize"),
+
+lots:num("lots"),
+
+qty:num("lotSize")*num("lots"),
+
+callStrike:num("callStrike"),
+
+putStrike:num("putStrike"),
+
+callEntry:num("callEntry"),
+
+putEntry:num("putEntry"),
+
+callLive:num("callLive"),
+
+putLive:num("putLive"),
+
+callDelta:num("callDelta"),
+
+putDelta:num("putDelta"),
+
+expiryPrice:num("expiryPrice"),
+
+spotPrice:num("spotPrice"),
+
+liveSpotPrice:num("liveSpotPrice"),
+
+targetCash:num("targetCash"),
+
+targetRunningPnl:num("targetRunningPnl"),
+
+legType:document.getElementById("legType").value
+
+};
+
+}
+
+/* ==========================================================
+MASTER CALCULATION ENGINE
+========================================================== */
+
+function calculate(){
+
+const d=getInputs();
+
+calculateRunningPnL(d);
+
+calculateExpiryPnL(d);
+
+calculateBreakEven(d);
+
+prepareMarketModel(d);
+
+calculateLiveScenario(d);
+
+calculateExpiryScenario(d);
+
+calculateSingleLegExit(d);
+
+updateDashboard(d);
+
+}
+
+/* ==========================================================
+RUNNING P&L ENGINE
+========================================================== */
+
+function calculateRunningPnL(d){
+
+const isLong = d.strategy.startsWith("Long");
+
+const entryPremium =
+d.callEntry + d.putEntry;
+
+const livePremium =
+d.callLive + d.putLive;
+
+const runningPnL = isLong
+? (livePremium - entryPremium) * d.qty
+: (entryPremium - livePremium) * d.qty;
+
+setText("runningPnl", money(runningPnL));
+
+setText("entryPremiumDisplay", entryPremium.toFixed(2));
+
+setText("livePremiumDisplay", livePremium.toFixed(2));
+
+setText(
+"positionType",
+isLong ? "Net Buyer" : "Net Seller"
+);
+
+setText(
+"netPremiumMetric",
+(livePremium-entryPremium).toFixed(2)
+);
+
+if(isLong){
+
+setText(
+"maxProfitMetric",
+"Unlimited"
+);
+
+setText(
+"maxLossMetric",
+money(entryPremium*d.qty)
+);
+
+}else{
+
+setText(
+"maxProfitMetric",
+money(entryPremium*d.qty)
+);
+
+setText(
+"maxLossMetric",
+"Unlimited"
+);
+
+}
+
+setText(
+"riskPerLotMetric",
+money(entryPremium*d.lotSize)
+);
+
+updateBox(
+"runningBox",
+runningPnL
+);
+
+d.entryPremium = entryPremium;
+d.livePremium = livePremium;
+d.runningPnL = runningPnL;
+}
+
+/* ==========================================================
+EXPIRY P&L ENGINE
+========================================================== */
+
+function calculateExpiryPnL(d){
+
+const callIV =
+Math.max(
+0,
+d.expiryPrice-d.callStrike
+);
+
+const putIV =
+Math.max(
+0,
+d.putStrike-d.expiryPrice
+);
+
+const totalIV =
+callIV+putIV;
+
+const isLong =
+d.strategy.startsWith("Long");
+
+const expiryPnL = isLong
+
+?
+
+(
+(callIV-d.callEntry)+
+(putIV-d.putEntry)
+)*d.qty
+
+:
+
+(
+(d.callEntry-callIV)+
+(d.putEntry-putIV)
+)*d.qty;
+
+setText(
+"callIntrinsic",
+callIV.toFixed(2)
+);
+
+setText(
+"putIntrinsic",
+putIV.toFixed(2)
+);
+
+setText(
+"totalIntrinsic",
+totalIV.toFixed(2)
+);
+
+setText(
+"expiryPnl",
+money(expiryPnL)
+);
+
+updateBox(
+"expiryBox",
+expiryPnL
+);
+
+d.expiryPnL=expiryPnL;
+
+}
+
+/* ==========================================================
+BREAK-EVEN ENGINE
+========================================================== */
+
+function calculateBreakEven(d){
+
+const totalPremium =
+d.entryPremium;
+
+let lowerBE;
+let upperBE;
+
+if(d.strategy.includes("Straddle")){
+
+lowerBE =
+d.callStrike-totalPremium;
+
+upperBE =
+d.callStrike+totalPremium;
+
+}else{
+
+lowerBE =
+d.putStrike-totalPremium;
+
+upperBE =
+d.callStrike+totalPremium;
+
+}
+
+setText(
+"totalPremium",
+totalPremium.toFixed(2)
+);
+
+setText(
+"lowerBE",
+lowerBE.toFixed(2)
+);
+
+setText(
+"upperBE",
+upperBE.toFixed(2)
+);
+
+setText(
+"spotDisplay",
+d.spotPrice.toFixed(2)
+);
+
+let status="";
+
+if(d.spotPrice<lowerBE){
+
+status="Below Lower Break-Even";
+
+}else if(d.spotPrice>upperBE){
+
+status="Above Upper Break-Even";
+
+}else{
+
+status="Between Break-Evens";
+
+}
+
+setText(
+"beStatus",
+status
+);
+
+setText(
+"distLower",
+Math.abs(
+d.spotPrice-lowerBE
+).toFixed(2)
+);
+
+setText(
+"distUpper",
+Math.abs(
+upperBE-d.spotPrice
+).toFixed(2)
+);
+
+d.lowerBE=lowerBE;
+d.upperBE=upperBE;
+
+}
+
+/* ==========================================================
+STRIKE INTERVAL ENGINE
+========================================================== */
+
+function getStrikeInterval(lotSize){
+
+switch(Number(lotSize)){
+
+case 75:
 return 50;      // NIFTY
 
-case "35":
+case 35:
 return 100;     // BANKNIFTY
 
-case "65":
+case 65:
 return 50;      // FINNIFTY
 
-case "120":
+case 120:
 return 25;      // MIDCPNIFTY
 
-case "20":
+case 20:
 return 100;     // SENSEX
 
-case "30":
+case 30:
 return 100;     // BANKEX
 
 default:
@@ -528,301 +1487,293 @@ return 100;
 
 }
 
-function calculate(){
+/* ==========================================================
+MARKET MODEL
+========================================================== */
 
-const strategy = document.getElementById('strategy').value;
+function prepareMarketModel(d){
 
-const lotSize = num('lotSize');
-const lots = num('lots');
+d.interval =
+getStrikeInterval(d.lotSize);
 
-const qty = lotSize * lots;
-
-const callStrike = num('callStrike');
-const putStrike = num('putStrike');
-
-const callEntry = num('callEntry');
-const putEntry = num('putEntry');
-
-const callLive = num('callLive');
-const putLive = num('putLive');
-
-const expiryPrice = num('expiryPrice');
-const spotPrice = num('spotPrice');
-
-const targetCash = num('targetCash');
-const legType = document.getElementById('legType').value;
-
-const isLong = strategy.startsWith('Long');
-
-/* RUNNING PNL */
-
-const entryPremium =
-callEntry + putEntry;
-
-const livePremium =
-callLive + putLive;
-
-let runningPnL;
-
-if(isLong){
-runningPnL =
-(livePremium - entryPremium) * qty;
-}else{
-runningPnL =
-(entryPremium - livePremium) * qty;
-}
-
-document.getElementById('runningPnl').innerText =
-formatMoney(runningPnL);
-
-document.getElementById('entryPremiumDisplay').innerText =
-entryPremium.toFixed(2);
-
-document.getElementById('livePremiumDisplay').innerText =
-livePremium.toFixed(2);
-
-document.getElementById('positionType').innerText =
-isLong ? "Net Buyer" : "Net Seller";
-
-document.getElementById('netPremiumMetric').innerText =
-entryPremium.toFixed(2);
-
-if(isLong){
-
-document.getElementById('maxProfitMetric').innerText =
-"Unlimited";
-
-document.getElementById('maxLossMetric').innerText =
-formatMoney(entryPremium * qty);
-
-}
-else{
-
-document.getElementById('maxProfitMetric').innerText =
-formatMoney(entryPremium * qty);
-
-document.getElementById('maxLossMetric').innerText =
-"Unlimited";
+d.atmStrike =
+Math.round(
+d.spotPrice/d.interval
+)*d.interval;
 
 }
 
-document.getElementById('riskPerLotMetric').innerText =
-(entryPremium * lotSize).toFixed(2);
+/* ==========================================================
+LIVE SCENARIO ENGINE
+========================================================== */
 
-updateBox(
-document.getElementById('runningBox'),
-runningPnL
-);
+function calculateLiveScenario(d){
 
-/* EXPIRY PNL */
+const tbody =
+document.querySelector("#liveScenarioTable tbody");
 
-const callIntrinsic =
-Math.max(0, expiryPrice - callStrike);
+if(!tbody) return;
 
-const putIntrinsic =
-Math.max(0, putStrike - expiryPrice);
+let html="";
 
-let expiryPnL;
+const isLong =
+d.strategy.startsWith("Long");
 
-if(isLong){
+/* Current Values */
 
-expiryPnL =
-(
-(callIntrinsic - callEntry) +
-(putIntrinsic - putEntry)
-) * qty;
+const currentPnL = d.runningPnL;
 
-}else{
+const targetPnL = d.targetRunningPnl;
 
-expiryPnL =
-(
-(callEntry - callIntrinsic) +
-(putEntry - putIntrinsic)
-) * qty;
+const pnlNeeded =
+targetPnL-currentPnL;
 
-}
+const requiredPremiumChange =
+pnlNeeded/d.qty;
 
-document.getElementById('callIntrinsic').innerText =
-callIntrinsic.toFixed(2);
+const requiredNetPremium =
+d.livePremium+
+requiredPremiumChange;
 
-document.getElementById('putIntrinsic').innerText =
-putIntrinsic.toFixed(2);
+/* Save for future */
 
-document.getElementById('expiryPnl').innerText =
-formatMoney(expiryPnL);
+d.requiredNetPremium=requiredNetPremium;
+d.pnlNeeded=pnlNeeded;
 
-updateBox(
-document.getElementById('expiryBox'),
-expiryPnL
-);
+/* Planner Rows */
 
-/* BREAK-EVEN ANALYSIS */
-
-let lowerBE = 0;
-let upperBE = 0;
-
-if(strategy.includes("Straddle")){
-
-lowerBE = callStrike - entryPremium;
-upperBE = callStrike + entryPremium;
-
-}
-else{
-
-lowerBE = putStrike - entryPremium;
-upperBE = callStrike + entryPremium;
-
-}
-
-document.getElementById('totalPremium').innerText =
-entryPremium.toFixed(2);
-
-document.getElementById('lowerBE').innerText =
-lowerBE.toFixed(2);
-
-document.getElementById('upperBE').innerText =
-upperBE.toFixed(2);
-
-document.getElementById('spotDisplay').innerText =
-spotPrice.toFixed(2);
-
-let status = "";
-
-if(spotPrice < lowerBE){
-
-status = "Below Lower Break-Even";
-
-}
-else if(spotPrice > upperBE){
-
-status = "Above Upper Break-Even";
-
-}
-else{
-
-status = "Between Break-Evens";
-
-}
-
-document.getElementById('beStatus').innerText =
-status;
-
-document.getElementById('distLower').innerText =
-Math.abs(spotPrice - lowerBE).toFixed(2);
-
-document.getElementById('distUpper').innerText =
-Math.abs(upperBE - spotPrice).toFixed(2);
-
-const interval =
-getStrikeInterval();
-
-const atmStrike =
-Math.round(spotPrice / interval) * interval;
-
-let rows = "";
-
-for(let i = 5; i >= -5; i--){
-
-const strike =
-atmStrike + (i * interval);
-
-const c =
-Math.max(0, strike - callStrike);
-
-const p =
-Math.max(0, putStrike - strike);
-
-let pnl = 0;
-
-if(isLong){
-
-pnl =
-((c - callEntry) +
-(p - putEntry)) * qty;
-
-}
-else{
-
-pnl =
-((callEntry - c) +
-(putEntry - p)) * qty;
-
-}
-
-let label = "";
-
-if(i > 0){
-
-label = "+" + i;
-
-}
-else if(i < 0){
-
-label = i;
-
-}
-else{
-
-label = "ATM";
-
-}
-
-let rowStyle = "";
-
-if(i === 0){
-
-rowStyle =
-'style="background:#e8f0ff;font-weight:bold;"';
-
-}
-
-rows += `
-<tr ${rowStyle}>
-<td>${label}</td>
-<td>${strike.toFixed(0)}</td>
-<td>${formatMoney(pnl)}</td>
+html += `
+<tr class="target">
+<td colspan="3">Current Running P&L</td>
+<td colspan="3">${money(currentPnL)}</td>
 </tr>
+
+<tr>
+<td colspan="3">Desired Running P&L</td>
+<td colspan="3">${money(targetPnL)}</td>
+</tr>
+
+<tr>
+<td colspan="3">Additional P&L Required</td>
+<td colspan="3">${money(pnlNeeded)}</td>
+</tr>
+
+<tr>
+<td colspan="3">Current Net Premium</td>
+<td colspan="3">${d.livePremium.toFixed(2)}</td>
+</tr>
+
+<tr>
+<td colspan="3">Required Net Premium</td>
+<td colspan="3">${requiredNetPremium.toFixed(2)}</td>
+</tr>
+
+<tr>
+<td colspan="3">Premium Change Required</td>
+<td colspan="3">${requiredPremiumChange.toFixed(2)}</td>
+</tr>
+`;
+
+tbody.innerHTML=html;
+
+}
+
+/* ==========================================================
+EXPIRY SCENARIO ENGINE
+========================================================== */
+
+function calculateExpiryScenario(d){
+
+const tbody =
+document.querySelector("#scenarioTable tbody");
+
+if(!tbody) return;
+
+let html="";
+
+const isLong =
+d.strategy.startsWith("Long");
+
+for(let i=5;i>=-5;i--){
+
+const move =
+i*d.interval;
+
+const expiryATM =
+Math.round(d.expiryPrice / d.interval) * d.interval;
+
+const expirySpot =
+expiryATM + move;
+
+const callIV =
+Math.max(
+0,
+expirySpot-d.callStrike
+);
+
+const putIV =
+Math.max(
+0,
+d.putStrike-expirySpot
+);
+
+const netIV =
+callIV+putIV;
+
+const pnl = isLong
+
+?
+
+(
+(callIV-d.callEntry)+
+(putIV-d.putEntry)
+)*d.qty
+
+:
+
+(
+(d.callEntry-callIV)+
+(d.putEntry-putIV)
+)*d.qty;
+
+let label="ATM";
+
+if(move>0)
+label="+"+move;
+
+if(move<0)
+label=move;
+
+html+=`
+
+<tr class="${move===0?'atm':''}">
+
+<td>${label}</td>
+
+<td>${expirySpot.toFixed(0)}</td>
+
+<td>${callIV.toFixed(2)}</td>
+
+<td>${putIV.toFixed(2)}</td>
+
+<td>${netIV.toFixed(2)}</td>
+
+<td>${money(pnl)}</td>
+
+</tr>
+
 `;
 
 }
 
-document.querySelector(
-"#scenarioTable tbody"
-).innerHTML = rows;
+tbody.innerHTML=html;
 
-/* SINGLE LEG EXIT CALCULATOR */
+}
 
-let entryPremiumLeg =
-legType === 'Call'
-? callEntry
-: putEntry;
+
+/* ==========================================================
+SINGLE LEG EXIT ENGINE
+========================================================== */
+
+function calculateSingleLegExit(d){
+
+const isLong =
+d.strategy.startsWith("Long");
+
+let entryPremium =
+d.legType==="Call"
+? d.callEntry
+: d.putEntry;
 
 let requiredExit;
 
 if(isLong){
 
 requiredExit =
-entryPremiumLeg +
-(targetCash / qty);
+entryPremium +
+(d.targetCash/d.qty);
 
 }else{
 
 requiredExit =
-entryPremiumLeg -
-(targetCash / qty);
+entryPremium -
+(d.targetCash/d.qty);
 
 }
 
 requiredExit =
-Math.max(0, requiredExit);
+Math.max(0,requiredExit);
 
-document.getElementById('requiredPremium').innerText =
-formatMoney(requiredExit);
+setText(
+"requiredPremium",
+money(requiredExit)
+);
+
 }
+
+/* ==========================================================
+POSITION SUMMARY
+========================================================== */
+
+function updateDashboard(d){
+
+const instrument =
+document.getElementById("instrument");
+
+const instrumentName =
+instrument.options[
+instrument.selectedIndex
+].text;
+
+setText(
+"summaryInstrument",
+instrumentName
+);
+
+setText(
+"summaryStrategy",
+d.strategy
+);
+
+setText(
+"summaryQty",
+d.qty
+);
+
+setText(
+"summaryBias",
+d.strategy.startsWith("Long")
+? "Long Volatility"
+: "Short Volatility"
+);
+
+let status="Neutral";
+
+if(d.runningPnL>0)
+status="Profit";
+
+if(d.runningPnL<0)
+status="Loss";
+
+setText(
+"summaryStatus",
+status
+);
+
+}
+
+/* ==========================================================
+INITIALIZE
+========================================================== */
+
+window.onload=function(){
+
+setLotSize();
 
 calculate();
 
-</script>
+};
 
+</script>
 </body>
 </html>
